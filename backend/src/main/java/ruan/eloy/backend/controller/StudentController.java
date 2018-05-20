@@ -1,4 +1,4 @@
-package ruan.eloy.backend;
+package ruan.eloy.backend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
