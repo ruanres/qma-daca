@@ -9,11 +9,11 @@ public class Student {
 
     @Id
     @NotEmpty
-    @Size(min=8, max = 8)
+    @Size(min=9, max = 9, message = "registration must be 9 characters long")
     private String registration;
 
     @NotEmpty
-    @Size(min=8, max = 8)
+    @Size(min=5, max = 5, message = "courseCode must be 5 characters long")
     private String courseCode;
 
     @NotEmpty
@@ -23,14 +23,14 @@ public class Student {
     @Email
     private String email;
 
-    @Size(min = 10, max = 11)
+    @Size(min = 10, max = 11, message = "phone number must be of size 10 or 11")
     private String phone;
 
     @NotNull
     @Min(0) @Max(5)
     private Integer rating = 5;
 
-    public Student(@NotEmpty @Size(min = 8, max = 8) String registration, @NotEmpty @Size(min = 8, max = 8) String courseCode, @NotEmpty String name, @NotEmpty @Email String email, @Size(min = 10, max = 11) String phone) {
+    public Student(String registration, String courseCode, String name, String email, String phone) {
         this.registration = registration;
         this.courseCode = courseCode;
         this.name = name;
