@@ -1,6 +1,7 @@
 package ruan.eloy.backend.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.*;
 
@@ -8,6 +9,9 @@ import javax.validation.constraints.*;
 public class Student {
 
     @Id
+    @GeneratedValue
+    private Long id;
+
     @NotEmpty
     @Size(min=9, max = 9, message = "registration must be 9 characters long")
     private String registration;
@@ -39,6 +43,14 @@ public class Student {
     }
 
     public Student() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getRegistration() {

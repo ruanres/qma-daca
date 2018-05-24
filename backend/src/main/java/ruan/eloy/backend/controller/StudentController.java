@@ -8,7 +8,7 @@ import ruan.eloy.backend.service.StudentService;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/student")
+@RequestMapping("student")
 public class StudentController {
 
     private final StudentService studentService;
@@ -23,8 +23,8 @@ public class StudentController {
         return studentService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Student> findById(@PathVariable String id) {
+    @GetMapping("{id}")
+    public Optional<Student> findById(@PathVariable Long id) {
         return studentService.getById(id);
     }
 
@@ -33,8 +33,8 @@ public class StudentController {
         return studentService.create(student);
     }
 
-    @DeleteMapping("/{id}")
-    public void remove(@PathVariable String id) {
+    @DeleteMapping("{id}")
+    public void remove(@PathVariable Long id) {
         studentService.removeById(id);
     }
 

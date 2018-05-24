@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ruan.eloy.backend.entity.Student;
 
 @Repository
-public interface StudentRepository extends CrudRepository<Student, String> {
+public interface StudentRepository extends CrudRepository<Student, Long> {
 
     Student findByEmail(String email);
 }

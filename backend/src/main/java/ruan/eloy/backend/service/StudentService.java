@@ -30,11 +30,11 @@ public class StudentService {
         return Optional.ofNullable(studentRepository.findByEmail(email));
     }
 
-    public Optional<Student> getById(String id) {
+    public Optional<Student> getById(Long id) {
         return studentRepository.findById(id);
     }
 
-    public void removeById(String id) {
+    public void removeById(Long id) {
         studentRepository.deleteById(id);
     }
 
