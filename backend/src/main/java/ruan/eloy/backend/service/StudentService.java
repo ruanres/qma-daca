@@ -27,7 +27,7 @@ public class StudentService {
     }
 
     public Optional<Student> getByEmail(String email) {
-        return Optional.ofNullable(studentRepository.findByEmail(email));
+        return studentRepository.findByEmail(email);
     }
 
     public Optional<Student> getById(Long id) {
