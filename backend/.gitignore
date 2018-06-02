@@ -23,7 +23,4 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/src/
 
-### Firebase credentials ###
-/src/main/resources/firebase-adminsdk.json
