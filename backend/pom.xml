@@ -49,12 +49,6 @@
 			<scope>runtime</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.firebase</groupId>
-			<artifactId>firebase-server-sdk</artifactId>
-			<version>3.0.1</version>
-		</dependency>
-
 		<!-- For Working with Json Web Tokens (JWT) -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>

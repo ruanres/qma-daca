@@ -10,4 +10,14 @@ import java.util.Optional;
 public interface StudentRepository extends CrudRepository<Student, Long> {
 
     Optional<Student> findByEmail(String email);
+
+    Optional<Student> findByRegistration(String registration);
+
+    Optional<Student> findById(Long id);
+
+    Optional<Student> findByRegistrationOrEmail(String registration, String email);
+
+    Boolean existsByRegistration(String registration);
+
+    Boolean existsByEmail(String email);
 }

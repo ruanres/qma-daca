@@ -1,5 +1,7 @@
 package ruan.eloy.backend.entity;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.HashSet;
@@ -43,9 +45,10 @@ public class Student {
     @Size(min = 10, max = 11, message = "phone number must be of size 10 or 11")
     private String phone;
 
+    @Value("${student.initialRating}")
     @NotNull
     @Min(0) @Max(5)
-    private Integer rating = 5;
+    private Integer rating;
 
     public Student(String registration, String courseCode, String name, String email, String password, String phone) {
         this.registration = registration;
