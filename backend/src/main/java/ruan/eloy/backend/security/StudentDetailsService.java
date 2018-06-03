@@ -33,7 +33,7 @@ public class StudentDetailsService implements UserDetailsService {
         return StudentPrincipal.create(student);
     }
 
-    public UserDetails loadUserById(Long id) {
+    public StudentPrincipal loadUserById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Student not found with id: " + id));
 

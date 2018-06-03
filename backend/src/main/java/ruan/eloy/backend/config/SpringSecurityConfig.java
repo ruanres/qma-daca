@@ -13,7 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ruan.eloy.backend.security.JwtAuthenticationEntryPoint;
+import ruan.eloy.backend.security.JwtAuthenticationFilter;
 import ruan.eloy.backend.security.StudentDetailsService;
 
 @Configuration
@@ -35,7 +37,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         this.unauthorizedHandler = unauthorizedHandler;
     }
 
-//    JwtAuthenticationFilter
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
 
     /**
      * AuthenticationManagerBuilder is used to create
@@ -77,5 +82,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         .permitAll()
                 .anyRequest()
                     .authenticated();
+
+        // add the jwt filter
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }
