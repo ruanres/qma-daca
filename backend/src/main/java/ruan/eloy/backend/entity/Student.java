@@ -17,22 +17,22 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty
-    @Size(min=9, max = 9, message = "registration must be 9 characters long")
+    @NotBlank
+    @Size(min = 9, max = 9)
     private String registration;
 
-    @NotEmpty
-    @Size(min=5, max = 5, message = "courseCode must be 5 characters long")
+    @NotBlank
+    @Size(min = 5, max = 5)
     private String courseCode;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
-    @NotEmpty
+    @NotBlank
     @Email
     private String email;
 
-    @NotEmpty
+    @NotBlank
     @Size(max = 100)
     private String password;
 
@@ -42,7 +42,7 @@ public class Student {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    @Size(min = 10, max = 11, message = "phone number must be of size 10 or 11")
+    @Size(min = 10, max = 11)
     private String phone;
 
     @Value("${student.initialRating}")
