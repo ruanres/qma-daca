@@ -28,11 +28,6 @@ public class StudentController {
         return studentService.getById(id);
     }
 
-    @PostMapping()
-    public Student create(@RequestBody Student student) {
-        return studentService.create(student);
-    }
-
     @DeleteMapping("{id}")
     public void remove(@PathVariable Long id) {
         studentService.removeById(id);

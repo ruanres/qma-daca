@@ -2,7 +2,7 @@ package ruan.eloy.backend.payload;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class SignInRequest {
 
     @NotBlank
     private String registration;
