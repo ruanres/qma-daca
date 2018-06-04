@@ -45,10 +45,8 @@ public class Student {
     @Size(min = 10, max = 11)
     private String phone;
 
-    @Value("${student.initialRating}")
-    @NotNull
     @Min(0) @Max(5)
-    private Integer rating;
+    private Integer rating = 5;
 
     public Student(String registration, String courseCode, String name, String email, String password, String phone) {
         this.registration = registration;
