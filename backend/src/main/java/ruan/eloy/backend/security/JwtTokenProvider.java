@@ -18,9 +18,6 @@ public class JwtTokenProvider {
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
-    @Value("${app.jwtExpirationInMs}")
-    private String jwtExpirationInMs;
-
     public String generateToke(Authentication authentication) {
         StudentPrincipal studentPrincipal = (StudentPrincipal) authentication.getPrincipal();
 
