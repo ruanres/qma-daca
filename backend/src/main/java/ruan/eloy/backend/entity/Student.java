@@ -1,48 +1,64 @@
 package ruan.eloy.backend.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "students", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"email", "registration"})
+})
 public class Student {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty
-    @Size(min=9, max = 9, message = "registration must be 9 characters long")
+    @NotBlank
+    @Size(min = 9, max = 9)
     private String registration;
 
-    @NotEmpty
-    @Size(min=5, max = 5, message = "courseCode must be 5 characters long")
+    @NotBlank
+    @Size(min = 5, max = 5)
     private String courseCode;
 
-    @NotEmpty
+    @NotBlank
     private String name;
 
-    @NotEmpty
+    @NotBlank
     @Email
     private String email;
 
-    @Size(min = 10, max = 11, message = "phone number must be of size 10 or 11")
+    @NotBlank
+    @Size(max = 100)
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "student_roles",
+            joinColumns = @JoinColumn(name = "student_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    @Size(min = 10, max = 11)
     private String phone;
 
-    @NotNull
     @Min(0) @Max(5)
     private Integer rating = 5;
 
-    public Student(String registration, String courseCode, String name, String email, String phone) {
+    public Student(String registration, String courseCode, String name, String email, String password, String phone) {
         this.registration = registration;
         this.courseCode = courseCode;
         this.name = name;
         this.email = email;
+        this.password = password;
         this.phone = phone;
     }
 
     public Student() {
+
     }
 
     public Long getId() {
@@ -99,5 +115,21 @@ public class Student {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

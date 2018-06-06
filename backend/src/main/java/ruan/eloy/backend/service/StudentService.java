@@ -2,10 +2,14 @@ package ruan.eloy.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ruan.eloy.backend.Exceptions.AppException;
+import ruan.eloy.backend.entity.Role;
+import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;
+import ruan.eloy.backend.repository.RoleRepository;
 import ruan.eloy.backend.repository.StudentRepository;
 
-import javax.validation.Valid;
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -13,12 +17,23 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
+    private RoleRepository roleRepository;
+
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, RoleRepository roleRepository) {
         this.studentRepository = studentRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public Student create(@Valid Student student) {
+    public Student create(String registration, String courseCode,
+                          String name, String email, String password, String phone) {
+
+        Student student = new Student(registration, courseCode, name, email, password, phone);
+
+        Role role = roleRepository.findByName(RoleName.ROLE_STUDENT)
+                .orElseThrow(() -> new AppException("Student role not set."));
+        student.setRoles(Collections.singleton(role));
+
         return studentRepository.save(student);
     }
 
@@ -27,7 +42,7 @@ public class StudentService {
     }
 
     public Optional<Student> getByEmail(String email) {
-        return Optional.ofNullable(studentRepository.findByEmail(email));
+        return studentRepository.findByEmail(email);
     }
 
     public Optional<Student> getById(Long id) {
@@ -38,4 +53,11 @@ public class StudentService {
         studentRepository.deleteById(id);
     }
 
+    public Boolean isRegistrationUnique(String registration) {
+        return studentRepository.existsByRegistration(registration);
+    }
+
+    public Boolean isEmailUnique(String email) {
+        return studentRepository.existsByEmail(email);
+    }
 }
