@@ -1,11 +1,13 @@
 package ruan.eloy.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ruan.eloy.backend.Exceptions.AppException;
 import ruan.eloy.backend.entity.Role;
 import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;
+import ruan.eloy.backend.entity.StudentPublicAttrib;
 import ruan.eloy.backend.repository.RoleRepository;
 import ruan.eloy.backend.repository.StudentRepository;
 
@@ -41,12 +43,21 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Optional<Student> getByEmail(String email) {
-        return studentRepository.findByEmail(email);
+    public Optional<Student> getByRegistration(String registration) {
+        return studentRepository.findByRegistration(registration);
     }
 
-    public Optional<Student> getById(Long id) {
-        return studentRepository.findById(id);
+    public String getStudentInfo(String registration, String attribute) {
+        Student student = getByRegistration(registration)
+                .orElseThrow(() -> new UsernameNotFoundException("Student not found"));
+
+        try {
+            attribute = attribute.trim().toUpperCase();
+            StudentPublicAttrib attrib = StudentPublicAttrib.valueOf(attribute);
+            return student.getAttributeValue(attrib);
+        } catch (IllegalArgumentException e) {
+            throw new AppException("Student info not found or not public");
+        }
     }
 
     public void removeById(Long id) {

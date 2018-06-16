@@ -78,7 +78,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/auth/**")
+                    .antMatchers("/auth/**", "/student/**")
                         .permitAll()
                 .anyRequest()
                     .authenticated();

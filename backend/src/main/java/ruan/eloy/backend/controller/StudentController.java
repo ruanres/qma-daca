@@ -23,9 +23,14 @@ public class StudentController {
         return studentService.getAll();
     }
 
-    @GetMapping("{id}")
-    public Optional<Student> findById(@PathVariable Long id) {
-        return studentService.getById(id);
+    @GetMapping("{registration}/info")
+    public String getInfo(@PathVariable String registration, @RequestParam String prop) {
+        return studentService.getStudentInfo(registration, prop);
+    }
+
+    @GetMapping("{registration}")
+    public Optional<Student> findByRegistration(@PathVariable String registration) {
+        return studentService.getByRegistration(registration);
     }
 
     @DeleteMapping("{id}")
