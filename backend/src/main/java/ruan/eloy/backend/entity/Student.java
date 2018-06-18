@@ -1,6 +1,7 @@
 package ruan.eloy.backend.entity;
 
-import org.springframework.beans.factory.annotation.Value;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -32,6 +33,7 @@ public class Student {
     @Email
     private String email;
 
+    @JsonIgnore
     @NotBlank
     @Size(max = 100)
     private String password;
@@ -131,5 +133,22 @@ public class Student {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getAttributeValue(StudentPublicAttrib attribute) {
+        switch (attribute) {
+            case NAME:
+                return getName();
+            case EMAIL:
+                return getEmail();
+            case COURSECODE:
+                return getCourseCode();
+            case PHONE:
+                return getPhone();
+            case RATING:
+                return getRating().toString();
+            default:
+                return "";
+        }
     }
 }
