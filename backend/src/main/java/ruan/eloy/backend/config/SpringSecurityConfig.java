@@ -32,7 +32,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    public SpringSecurityConfig(StudentDetailsService studentDetailsService, JwtAuthenticationEntryPoint unauthorizedHandler) {
+    public SpringSecurityConfig(StudentDetailsService studentDetailsService,
+                                JwtAuthenticationEntryPoint unauthorizedHandler) {
         this.studentDetailsService = studentDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
@@ -78,7 +79,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/auth/**", "/student/**")
+                    .antMatchers("/auth/**")
                         .permitAll()
                 .anyRequest()
                     .authenticated();
