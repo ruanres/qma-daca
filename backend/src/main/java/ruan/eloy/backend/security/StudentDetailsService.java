@@ -33,6 +33,7 @@ public class StudentDetailsService implements UserDetailsService {
         return StudentPrincipal.create(student);
     }
 
+    @Transactional
     public StudentPrincipal loadUserById(Long id) {
         Student student = studentRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Student not found with id: " + id));
