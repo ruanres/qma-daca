@@ -17,19 +17,13 @@ import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
     private StudentDetailsService studentDetailsService;
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-
-    @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider, StudentDetailsService studentDetailsService) {
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.studentDetailsService = studentDetailsService;
-    }
-
-    public JwtAuthenticationFilter() {}
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
