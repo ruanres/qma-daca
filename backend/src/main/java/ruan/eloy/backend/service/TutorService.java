@@ -11,6 +11,7 @@ import ruan.eloy.backend.repository.StudentRepository;
 import ruan.eloy.backend.repository.TutorRepository;
 
 import javax.validation.Valid;
+import java.util.Set;
 
 @Service
 public class TutorService {
@@ -27,19 +28,26 @@ public class TutorService {
 
     @Transactional
     public Tutor create(@Valid TutorRequest tutorRequest) {
-        Student student = studentRepository.findByRegistration(tutorRequest.getRegistration())
-                .orElseThrow(() -> new StudentNotFoundException());
-
+        Student student = getStudent(tutorRequest.getRegistration());
         Tutor tutor = new Tutor(tutorRequest.getSubject(), tutorRequest.getProficiency(), student);
         tutorRepository.save(tutor);
 
         student.addTutor(tutor);
         studentRepository.save(student);
-
         return tutor;
+    }
+
+    public Set<Tutor> getTutorsByRegistration(String registration) {
+        Student student = getStudent(registration);
+        return student.getTutors();
     }
 
     public Iterable<Tutor> getAll() {
         return tutorRepository.findAll();
+    }
+
+    private Student getStudent(String registration) {
+        return studentRepository.findByRegistration(registration)
+                .orElseThrow(() -> new StudentNotFoundException());
     }
 }

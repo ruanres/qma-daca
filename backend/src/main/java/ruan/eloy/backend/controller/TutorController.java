@@ -9,6 +9,7 @@ import ruan.eloy.backend.payload.TutorRequest;
 import ruan.eloy.backend.service.TutorService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("tutor")
@@ -25,6 +26,12 @@ public class TutorController {
     public ResponseEntity<Tutor> createOne(@RequestBody TutorRequest tutorRequest) {
         Tutor tutor = tutorService.create(tutorRequest);
         return new ResponseEntity<>(tutor, HttpStatus.CREATED);
+    }
+
+    @GetMapping("{registration}")
+    public ResponseEntity<Set<Tutor>> findTutorsByRegistration(@PathVariable String registration) {
+        Set<Tutor> tutors = tutorService.getTutorsByRegistration(registration);
+        return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
 
     @GetMapping
