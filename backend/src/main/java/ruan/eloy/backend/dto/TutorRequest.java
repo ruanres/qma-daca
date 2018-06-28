@@ -8,22 +8,10 @@ import javax.validation.constraints.Size;
 public class TutorRequest {
 
     @NotBlank
-    @Size(min=9, max = 9)
-    private String registration;
-
-    @NotBlank
     private String subject;
 
     @Min(1) @Max(5)
     private Integer proficiency;
-
-    public String getRegistration() {
-        return registration;
-    }
-
-    public void setRegistration(String registration) {
-        this.registration = registration;
-    }
 
     public String getSubject() {
         return subject;

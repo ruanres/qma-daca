@@ -41,6 +41,11 @@ public class Tutor {
         this.student = student;
     }
 
+    public Tutor(String subject, Integer proficiency) {
+        this.subject = subject;
+        this.proficiency = proficiency;
+    }
+
     public Tutor() {}
 
     public Long getId() {

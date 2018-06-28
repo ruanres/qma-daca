@@ -25,8 +25,9 @@ public class TutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Tutor> createOne(@RequestBody TutorRequest tutorRequest) {
-        Tutor tutor = tutorService.create(tutorRequest);
+    public ResponseEntity<Tutor> createOne(@RequestBody TutorRequest tutorRequest,
+                                           @CurrentUser StudentPrincipal currentStudent) {
+        Tutor tutor = tutorService.create(tutorRequest, currentStudent.getRegistration());
         return new ResponseEntity<>(tutor, HttpStatus.CREATED);
     }
 

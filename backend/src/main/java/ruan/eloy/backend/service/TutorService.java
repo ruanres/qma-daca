@@ -29,9 +29,10 @@ public class TutorService {
     }
 
     @Transactional
-    public Tutor create(@Valid TutorRequest tutorRequest) {
-        Student student = getStudent(tutorRequest.getRegistration());
-        Tutor tutor = new Tutor(tutorRequest.getSubject(), tutorRequest.getProficiency(), student);
+    public Tutor create(@Valid TutorRequest tutorRequest, String registration) {
+        Student student = getStudent(registration);
+        Tutor tutor = new Tutor(tutorRequest.getSubject(), tutorRequest.getProficiency());
+        tutor.setStudent(student);
         tutorRepository.save(tutor);
 
         student.addTutor(tutor);
