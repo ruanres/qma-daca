@@ -54,7 +54,7 @@ public class Student {
     @Min(0) @Max(5)
     private Integer rating = 5;
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private Set<Tutor> tutors;
 
     public Student(String registration, String courseCode, String name, String email, String password, String phone) {

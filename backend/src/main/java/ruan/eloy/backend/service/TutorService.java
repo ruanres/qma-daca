@@ -7,10 +7,12 @@ import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Student;
 import ruan.eloy.backend.entity.Tutor;
 import ruan.eloy.backend.dto.TutorRequest;
+import ruan.eloy.backend.exception.TutorNotFoundException;
 import ruan.eloy.backend.repository.StudentRepository;
 import ruan.eloy.backend.repository.TutorRepository;
 
 import javax.validation.Valid;
+import java.util.Iterator;
 import java.util.Set;
 
 @Service
@@ -46,12 +48,27 @@ public class TutorService {
         return tutorRepository.findAll();
     }
 
-    public void removeTutor(Long id) {
-        tutorRepository.deleteById(id);
+    public void removeTutor(Long id, Set<Tutor> tutors) {
+        if(ownsTutor(id, tutors)) {
+            tutorRepository.deleteById(id);
+        } else {
+            throw new TutorNotFoundException();
+        }
     }
 
     private Student getStudent(String registration) {
         return studentRepository.findByRegistration(registration)
                 .orElseThrow(() -> new StudentNotFoundException());
+    }
+
+    private boolean ownsTutor(Long id, Set<Tutor> tutors) {
+        Iterator iterator = tutors.iterator();
+        while (iterator.hasNext()) {
+            Tutor tutor = (Tutor) iterator.next();
+            if(tutor.getId().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
