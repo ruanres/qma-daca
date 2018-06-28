@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ruan.eloy.backend.entity.Tutor;
-import ruan.eloy.backend.payload.TutorRequest;
+import ruan.eloy.backend.dto.TutorRequest;
 import ruan.eloy.backend.service.TutorService;
 
 import java.util.List;
@@ -28,15 +28,15 @@ public class TutorController {
         return new ResponseEntity<>(tutor, HttpStatus.CREATED);
     }
 
-    @GetMapping("{registration}")
-    public ResponseEntity<Set<Tutor>> findTutorsByRegistration(@PathVariable String registration) {
-        Set<Tutor> tutors = tutorService.getTutorsByRegistration(registration);
-        return new ResponseEntity<>(tutors, HttpStatus.OK);
-    }
-
     @GetMapping
     public ResponseEntity<List<Tutor>> findAll() {
         List<Tutor> tutors = (List<Tutor>) tutorService.getAll();
+        return new ResponseEntity<>(tutors, HttpStatus.OK);
+    }
+
+    @GetMapping("{registration}")
+    public ResponseEntity<Set<Tutor>> findTutorsByRegistration(@PathVariable String registration) {
+        Set<Tutor> tutors = tutorService.getTutorsByRegistration(registration);
         return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
 }

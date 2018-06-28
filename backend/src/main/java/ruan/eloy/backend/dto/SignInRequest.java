@@ -1,4 +1,4 @@
-package ruan.eloy.backend.payload;
+package ruan.eloy.backend.dtos;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,4 +1,4 @@
-package ruan.eloy.backend.payload;
+package ruan.eloy.backend.dto;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -16,12 +16,6 @@ public class TutorRequest {
 
     @Min(1) @Max(5)
     private Integer proficiency;
-
-    public TutorRequest(String registration, String subject, Integer profeciency) {
-        this.registration = registration;
-        this.subject = subject;
-        this.proficiency = profeciency;
-    }
 
     public String getRegistration() {
         return registration;

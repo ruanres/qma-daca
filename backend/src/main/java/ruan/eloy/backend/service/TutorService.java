@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ruan.eloy.backend.Exceptions.StudentNotFoundException;
 import ruan.eloy.backend.entity.Student;
 import ruan.eloy.backend.entity.Tutor;
-import ruan.eloy.backend.payload.TutorRequest;
+import ruan.eloy.backend.dto.TutorRequest;
 import ruan.eloy.backend.repository.StudentRepository;
 import ruan.eloy.backend.repository.TutorRepository;
 

@@ -11,11 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ruan.eloy.backend.entity.Student;
-import ruan.eloy.backend.payload.ApiResponse;
-import ruan.eloy.backend.payload.JwtAuthenticationResponse;
-import ruan.eloy.backend.payload.SignInRequest;
-import ruan.eloy.backend.payload.SignUpRequest;
-import ruan.eloy.backend.repository.RoleRepository;
+import ruan.eloy.backend.dto.ApiResponse;
+import ruan.eloy.backend.dto.JwtAuthenticationResponse;
+import ruan.eloy.backend.dto.SignInRequest;
+import ruan.eloy.backend.dto.SignUpRequest;
 import ruan.eloy.backend.service.StudentService;
 
 import javax.validation.Valid;
