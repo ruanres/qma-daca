@@ -1,5 +1,8 @@
 package ruan.eloy.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -7,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tutors")
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
 public class Tutor {
 
     @Id

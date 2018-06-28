@@ -1,7 +1,9 @@
 package ruan.eloy.backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,8 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email", "registration"})
-})
+        @UniqueConstraint(columnNames = {"email", "registration"})})
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
 public class Student {
 
     @Id
