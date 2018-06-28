@@ -2,8 +2,8 @@ package ruan.eloy.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ruan.eloy.backend.Exceptions.AppException;
-import ruan.eloy.backend.Exceptions.StudentNotFoundException;
+import ruan.eloy.backend.exception.AppException;
+import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Role;
 import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;

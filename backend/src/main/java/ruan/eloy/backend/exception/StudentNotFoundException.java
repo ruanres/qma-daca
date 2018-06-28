@@ -1,4 +1,4 @@
-package ruan.eloy.backend.Exceptions;
+package ruan.eloy.backend.exception;
 
 
 public class StudentNotFoundException extends RuntimeException {

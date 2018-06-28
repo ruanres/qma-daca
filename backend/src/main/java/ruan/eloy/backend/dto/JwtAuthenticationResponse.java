@@ -1,4 +1,4 @@
-package ruan.eloy.backend.dtos;
+package ruan.eloy.backend.dto;
 
 public class JwtAuthenticationResponse {
 
