@@ -3,7 +3,7 @@ package ruan.eloy.backend.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ruan.eloy.backend.Exceptions.StudentNotFoundException;
+import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Student;
 import ruan.eloy.backend.entity.Tutor;
 import ruan.eloy.backend.dto.TutorRequest;
@@ -44,6 +44,10 @@ public class TutorService {
 
     public Iterable<Tutor> getAll() {
         return tutorRepository.findAll();
+    }
+
+    public void removeTutor(Long id) {
+        tutorRepository.deleteById(id);
     }
 
     private Student getStudent(String registration) {

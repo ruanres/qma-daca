@@ -39,4 +39,10 @@ public class TutorController {
         Set<Tutor> tutors = tutorService.getTutorsByRegistration(registration);
         return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
+
+    @DeleteMapping("{tutorId}")
+    public ResponseEntity removeTutor(@PathVariable Long tutorId) {
+        tutorService.removeTutor(tutorId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
