@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ruan.eloy.backend.entity.Tutor;
+import ruan.eloy.backend.dto.TutorResponse;
 import ruan.eloy.backend.dto.TutorRequest;
 import ruan.eloy.backend.security.CurrentUser;
 import ruan.eloy.backend.security.StudentPrincipal;
 import ruan.eloy.backend.service.TutorService;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("tutor")
@@ -25,21 +24,21 @@ public class TutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Tutor> createOne(@RequestBody TutorRequest tutorRequest,
+    public ResponseEntity<TutorResponse> createOne(@RequestBody TutorRequest tutorRequest,
                                            @CurrentUser StudentPrincipal currentStudent) {
-        Tutor tutor = tutorService.create(tutorRequest, currentStudent.getRegistration());
+        TutorResponse tutor = tutorService.create(tutorRequest, currentStudent.getRegistration());
         return new ResponseEntity<>(tutor, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Tutor>> findAll() {
-        List<Tutor> tutors = (List<Tutor>) tutorService.getAll();
+    public ResponseEntity<List<TutorResponse>> findAll() {
+        List<TutorResponse> tutors = tutorService.getAll();
         return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
 
     @GetMapping("{registration}")
-    public ResponseEntity<Set<Tutor>> findTutorsByRegistration(@PathVariable String registration) {
-        Set<Tutor> tutors = tutorService.getTutorsByRegistration(registration);
+    public ResponseEntity<List<TutorResponse>> findTutorsByRegistration(@PathVariable String registration) {
+        List<TutorResponse>tutors = tutorService.getTutorsByRegistration(registration);
         return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
 
