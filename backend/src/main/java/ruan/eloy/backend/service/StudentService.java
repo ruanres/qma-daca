@@ -1,9 +1,9 @@
 package ruan.eloy.backend.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ruan.eloy.backend.Exceptions.AppException;
+import ruan.eloy.backend.exception.AppException;
+import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Role;
 import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;
@@ -34,8 +34,8 @@ public class StudentService {
 
         Role role = roleRepository.findByName(RoleName.ROLE_STUDENT)
                 .orElseThrow(() -> new AppException("Student role not set."));
-        student.setRoles(Collections.singleton(role));
 
+        student.setRoles(Collections.singleton(role));
         return studentRepository.save(student);
     }
 
@@ -49,7 +49,7 @@ public class StudentService {
 
     public String getStudentInfo(String registration, String attribute) {
         Student student = getByRegistration(registration)
-                .orElseThrow(() -> new UsernameNotFoundException("Student not found"));
+                .orElseThrow(() -> new StudentNotFoundException());
 
         try {
             attribute = attribute.trim().toUpperCase();

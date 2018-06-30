@@ -1,7 +1,9 @@
 package ruan.eloy.backend.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -10,8 +12,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "students", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email", "registration"})
-})
+        @UniqueConstraint(columnNames = {"email", "registration"})})
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator.class,
+    property = "id")
 public class Student {
 
     @Id
@@ -50,6 +54,9 @@ public class Student {
     @Min(0) @Max(5)
     private Integer rating = 5;
 
+    @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
+    private Set<Tutor> tutors;
+
     public Student(String registration, String courseCode, String name, String email, String password, String phone) {
         this.registration = registration;
         this.courseCode = courseCode;
@@ -57,11 +64,10 @@ public class Student {
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.tutors = new HashSet<>();
     }
 
-    public Student() {
-
-    }
+    public Student() { }
 
     public Long getId() {
         return id;
@@ -133,6 +139,18 @@ public class Student {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Tutor> getTutors() {
+        return tutors;
+    }
+
+    public void setTutors(Set<Tutor> tutors) {
+        this.tutors = tutors;
+    }
+
+    public void addTutor(Tutor tutor) {
+        this.tutors.add(tutor);
     }
 
     public String getAttributeValue(StudentPublicAttrib attribute) {

@@ -5,10 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ruan.eloy.backend.entity.Student;
+import ruan.eloy.backend.entity.Tutor;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -32,14 +34,18 @@ public class StudentPrincipal implements UserDetails {
 
     private Collection<? extends  GrantedAuthority> authorities;
 
+    private Set<Tutor> tutors;
+
     public StudentPrincipal(Long id, String name, String registration, String email,
-                            String password, Collection<? extends GrantedAuthority> authorities) {
+                            String password, Collection<? extends GrantedAuthority> authorities,
+                            Set<Tutor> tutors) {
         this.id = id;
         this.name = name;
         this.registration = registration;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
+        this.tutors = tutors;
     }
 
     public static StudentPrincipal create(Student student) {
@@ -53,8 +59,8 @@ public class StudentPrincipal implements UserDetails {
                 student.getRegistration(),
                 student.getEmail(),
                 student.getPassword(),
-                authorities
-        );
+                authorities,
+                student.getTutors());
     }
 
     @Override
@@ -76,6 +82,10 @@ public class StudentPrincipal implements UserDetails {
 
     public String getEmail() {
         return email;
+    }
+
+    public Set<Tutor> getTutors() {
+        return tutors;
     }
 
     @Override
