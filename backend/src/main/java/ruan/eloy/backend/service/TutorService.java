@@ -16,6 +16,7 @@ import ruan.eloy.backend.repository.TutorRepository;
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class TutorService {
@@ -26,7 +27,7 @@ public class TutorService {
 
     private ModelMapper modelMapper;
 
-    private TypeMap<Tutor, TutorResponse> typeMap;
+    private TypeMap<Tutor, TutorResponse> tutorToDTO;
 
     @Autowired
     public TutorService(TutorRepository tutorRepository, StudentRepository studentRepository,
@@ -38,22 +39,22 @@ public class TutorService {
     }
 
     private void setTutorMapping() {
-        this.typeMap = this.modelMapper.createTypeMap(Tutor.class, TutorResponse.class);
-        this.typeMap.addMapping(tutor -> tutor.getStudent().getName(), TutorResponse::setName);
-        this.typeMap.addMapping(tutor -> tutor.getStudent().getEmail(), TutorResponse::setEmail);
-        this.typeMap.addMapping(tutor -> tutor.getStudent().getRegistration(), TutorResponse::setRegistration);
+        this.tutorToDTO = this.modelMapper.createTypeMap(Tutor.class, TutorResponse.class);
+        this.tutorToDTO.addMapping(tutor -> tutor.getStudent().getName(), TutorResponse::setName);
+        this.tutorToDTO.addMapping(tutor -> tutor.getStudent().getEmail(), TutorResponse::setEmail);
+        this.tutorToDTO.addMapping(tutor -> tutor.getStudent().getRegistration(), TutorResponse::setRegistration);
     }
 
     @Transactional
     public TutorResponse create(@Valid TutorRequest tutorRequest, String registration) {
         Student student = getStudent(registration);
-        Tutor tutor = new Tutor(tutorRequest.getSubject(), tutorRequest.getProficiency());
+        Tutor tutor = modelMapper.map(tutorRequest, Tutor.class);
         tutor.setStudent(student);
         tutorRepository.save(tutor);
 
         student.addTutor(tutor);
         studentRepository.save(student);
-        return this.typeMap.map(tutor);
+        return this.tutorToDTO.map(tutor);
     }
 
     public List<TutorResponse> getTutorsByRegistration(String registration) {
@@ -67,12 +68,15 @@ public class TutorService {
         return convertTutors(tutors);
     }
 
-    public void removeTutor(Long id, Set<Tutor> tutors) {
-        if(ownsTutor(id, tutors)) {
-            tutorRepository.deleteById(id);
-        } else {
-            throw new TutorNotFoundException();
-        }
+    public void removeTutor(Long id, Collection<Tutor> tutors) {
+        existsTutor(id, tutors);
+        tutorRepository.deleteById(id);
+    }
+
+    public TutorResponse update(Long id, TutorRequest tutorRequest, Collection<Tutor> tutors) {
+        Tutor tutor = existsTutor(id, tutors);
+        modelMapper.map(tutorRequest, tutor);
+        return tutorToDTO.map(tutorRepository.save(tutor));
     }
 
     private Student getStudent(String registration) {
@@ -80,21 +84,18 @@ public class TutorService {
                 .orElseThrow(() -> new StudentNotFoundException());
     }
 
-    private boolean ownsTutor(Long id, Collection<Tutor> tutors) {
+    private Tutor existsTutor(Long id, Collection<Tutor> tutors) {
         for (Tutor tutor: tutors) {
             if(tutor.getId().equals(id)) {
-                return true;
+                return tutor;
             }
         }
-        return false;
+        throw new TutorNotFoundException();
     }
 
     private List<TutorResponse> convertTutors(Collection<Tutor> tutors) {
-        List<TutorResponse> tutorResponses = new ArrayList<>();
-        for (Tutor tutor : tutors) {
-            TutorResponse tutorResponse = this.typeMap.map(tutor);
-            tutorResponses.add(tutorResponse);
-        }
-        return tutorResponses;
+        return tutors.stream()
+                .map(tutor -> tutorToDTO.map(tutor))
+                .collect(Collectors.toList());
     }
 }

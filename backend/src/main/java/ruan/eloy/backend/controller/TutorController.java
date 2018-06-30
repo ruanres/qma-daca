@@ -42,8 +42,16 @@ public class TutorController {
         return new ResponseEntity<>(tutors, HttpStatus.OK);
     }
 
+    @PutMapping("{id}")
+    public ResponseEntity<TutorResponse> updateOne(@PathVariable Long id,
+                                                   @RequestBody TutorRequest tutorRequest,
+                                                   @CurrentUser StudentPrincipal currentStudent) {
+        TutorResponse tutorResponse = tutorService.update(id, tutorRequest, currentStudent.getTutors());
+        return new ResponseEntity<>(tutorResponse, HttpStatus.OK);
+    }
+
     @DeleteMapping("{tutorId}")
-    public ResponseEntity removeTutor(@PathVariable Long tutorId, @CurrentUser StudentPrincipal currentStudent) {
+    public ResponseEntity removeOne(@PathVariable Long tutorId, @CurrentUser StudentPrincipal currentStudent) {
         tutorService.removeTutor(tutorId, currentStudent.getTutors());
         return new ResponseEntity(HttpStatus.OK);
     }
