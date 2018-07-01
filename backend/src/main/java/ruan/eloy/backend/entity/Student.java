@@ -39,7 +39,6 @@ public class Student {
 
     @JsonIgnore
     @NotBlank
-    @Size(max = 100)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -57,7 +56,8 @@ public class Student {
     @OneToMany(mappedBy = "student", fetch = FetchType.EAGER)
     private Set<Tutor> tutors;
 
-    public Student(String registration, String courseCode, String name, String email, String password, String phone) {
+    public Student(String registration, String courseCode, String name,
+                   String email, String password, String phone) {
         this.registration = registration;
         this.courseCode = courseCode;
         this.name = name;
