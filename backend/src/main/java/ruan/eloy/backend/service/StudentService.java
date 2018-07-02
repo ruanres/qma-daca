@@ -1,18 +1,21 @@
 package ruan.eloy.backend.service;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ruan.eloy.backend.dto.StudentResponse;
 import ruan.eloy.backend.exception.AppException;
 import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Role;
 import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;
-import ruan.eloy.backend.entity.StudentPublicAttrib;
 import ruan.eloy.backend.repository.RoleRepository;
 import ruan.eloy.backend.repository.StudentRepository;
 
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -21,10 +24,21 @@ public class StudentService {
 
     private RoleRepository roleRepository;
 
+    private ModelMapper modelMapper;
+
+    private TypeMap<Student, StudentResponse> studentToDTO;
+
     @Autowired
-    public StudentService(StudentRepository studentRepository, RoleRepository roleRepository) {
+    public StudentService(StudentRepository studentRepository, RoleRepository roleRepository,
+                          ModelMapper modelMapper) {
         this.studentRepository = studentRepository;
         this.roleRepository = roleRepository;
+        this.modelMapper = modelMapper;
+        setStudentMapping();
+    }
+
+    private void setStudentMapping() {
+        studentToDTO = this.modelMapper.createTypeMap(Student.class, StudentResponse.class);
     }
 
     public Student create(String registration, String courseCode,
@@ -39,25 +53,18 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
-    public Iterable<Student> getAll() {
-        return studentRepository.findAll();
+    public List<StudentResponse> findAll() {
+        List<Student> students = (List<Student>) studentRepository.findAll();
+        return students.stream()
+                .map(student -> studentToDTO.map(student))
+                .collect(Collectors.toList());
     }
 
-    public Optional<Student> getByRegistration(String registration) {
-        return studentRepository.findByRegistration(registration);
-    }
-
-    public String getStudentInfo(String registration, String attribute) {
-        Student student = getByRegistration(registration)
+    public StudentResponse getByRegistration(String registration) {
+        Student student = studentRepository.findByRegistration(registration)
                 .orElseThrow(() -> new StudentNotFoundException());
 
-        try {
-            attribute = attribute.trim().toUpperCase();
-            StudentPublicAttrib attrib = StudentPublicAttrib.valueOf(attribute);
-            return student.getAttributeValue(attrib);
-        } catch (IllegalArgumentException e) {
-            throw new AppException("Student info not found or not public");
-        }
+        return studentToDTO.map(student);
     }
 
     public void removeById(Long id) {

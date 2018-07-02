@@ -152,21 +152,4 @@ public class Student {
     public void addTutor(Tutor tutor) {
         this.tutors.add(tutor);
     }
-
-    public String getAttributeValue(StudentPublicAttrib attribute) {
-        switch (attribute) {
-            case NAME:
-                return getName();
-            case EMAIL:
-                return getEmail();
-            case COURSECODE:
-                return getCourseCode();
-            case PHONE:
-                return getPhone();
-            case RATING:
-                return getRating().toString();
-            default:
-                return "";
-        }
-    }
 }
