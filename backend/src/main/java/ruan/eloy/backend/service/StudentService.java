@@ -5,12 +5,9 @@ import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ruan.eloy.backend.dto.StudentResponse;
-import ruan.eloy.backend.exception.AppException;
 import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Role;
-import ruan.eloy.backend.entity.RoleName;
 import ruan.eloy.backend.entity.Student;
-import ruan.eloy.backend.repository.RoleRepository;
 import ruan.eloy.backend.repository.StudentRepository;
 
 import java.util.Collections;
@@ -22,17 +19,13 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    private RoleRepository roleRepository;
-
     private ModelMapper modelMapper;
 
     private TypeMap<Student, StudentResponse> studentToDTO;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, RoleRepository roleRepository,
-                          ModelMapper modelMapper) {
+    public StudentService(StudentRepository studentRepository, ModelMapper modelMapper) {
         this.studentRepository = studentRepository;
-        this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
         setStudentMapping();
     }
@@ -45,11 +38,7 @@ public class StudentService {
                           String name, String email, String password, String phone) {
 
         Student student = new Student(registration, courseCode, name, email, password, phone);
-
-        Role role = roleRepository.findByName(RoleName.ROLE_STUDENT)
-                .orElseThrow(() -> new AppException("Student role not set."));
-
-        student.setRoles(Collections.singleton(role));
+        student.setRoles(Collections.singleton(Role.ROLE_STUDENT));
         return studentRepository.save(student);
     }
 
