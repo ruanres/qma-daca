@@ -49,9 +49,10 @@ public class StudentPrincipal implements UserDetails {
     }
 
     public static StudentPrincipal create(Student student) {
-        List<GrantedAuthority> authorities = student.getRoles().stream().map(role ->
-            new SimpleGrantedAuthority(role.getName().name())
-        ).collect(Collectors.toList());
+        Set<GrantedAuthority> authorities = student.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
+                .collect(Collectors.toSet());
 
         return new StudentPrincipal(
                 student.getId(),

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ruan.eloy.backend.dto.TutorResponse;
+import ruan.eloy.backend.entity.Role;
 import ruan.eloy.backend.exception.StudentNotFoundException;
 import ruan.eloy.backend.entity.Student;
 import ruan.eloy.backend.entity.Tutor;
@@ -53,6 +54,7 @@ public class TutorService {
         tutorRepository.save(tutor);
 
         student.addTutor(tutor);
+        student.getRoles().add(Role.ROLE_TUTOR);
         studentRepository.save(student);
         return this.tutorToDTO.map(tutor);
     }

@@ -41,10 +41,10 @@ public class Student {
     @NotBlank
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "student_roles",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ElementCollection(targetClass = Role.class)
+    @CollectionTable(name = "roles")
+    @Column(name = "roles", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
     @Size(min = 10, max = 11)
