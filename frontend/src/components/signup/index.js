@@ -7,7 +7,7 @@ class Signup extends Component {
     render() { 
         return ( 
             <div>
-
+                <div>Signup</div>
             </div>
         )
     }
