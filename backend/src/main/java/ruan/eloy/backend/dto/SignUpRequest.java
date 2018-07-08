@@ -1,4 +1,4 @@
-package ruan.eloy.backend.payload;
+package ruan.eloy.backend.dto;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -11,7 +11,7 @@ public class SignUpRequest {
     private String registration;
 
     @NotBlank
-    @Size(min = 6, max = 20)
+    @Size(min = 6)
     private String password;
 
     @NotBlank

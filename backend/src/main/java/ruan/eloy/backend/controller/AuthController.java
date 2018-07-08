@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ruan.eloy.backend.payload.SignInRequest;
-import ruan.eloy.backend.payload.SignUpRequest;
+import ruan.eloy.backend.dto.SignInRequest;
+import ruan.eloy.backend.dto.SignUpRequest;
 import ruan.eloy.backend.security.AuthService;
 
 @RestController

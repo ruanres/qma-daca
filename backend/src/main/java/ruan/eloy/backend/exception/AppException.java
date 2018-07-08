@@ -1,4 +1,4 @@
-package ruan.eloy.backend.Exceptions;
+package ruan.eloy.backend.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

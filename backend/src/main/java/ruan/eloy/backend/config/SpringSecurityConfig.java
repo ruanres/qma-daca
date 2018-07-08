@@ -32,7 +32,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
-    public SpringSecurityConfig(StudentDetailsService studentDetailsService, JwtAuthenticationEntryPoint unauthorizedHandler) {
+    public SpringSecurityConfig(StudentDetailsService studentDetailsService,
+                                JwtAuthenticationEntryPoint unauthorizedHandler) {
         this.studentDetailsService = studentDetailsService;
         this.unauthorizedHandler = unauthorizedHandler;
     }
