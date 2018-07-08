@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 
 const Header = (props) => {
 
@@ -7,8 +7,8 @@ const Header = (props) => {
         <div>
             <nav>
                 <ul>
-                    <li>SignIn</li>
-                    <li>SignUp</li>
+                    <li><Link to='/signin'>SignIn</Link></li>
+                    <li><Link to='/signup'>SignUp</Link></li>
                 </ul>
             </nav>
         </div>
