@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
-import Header from './header';
-import SignIn from '../signin';
-import SignUp from '../signup';
+import Header from './Header';
+import SignIn from '../SignIn';
+import SignUp from '../SignUp';
 
 class Main extends Component {
 
