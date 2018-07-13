@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Input from '../UI/Input';
+import API from '../../config/api';
 
 class SignIn extends Component {
     state = {
@@ -30,6 +31,13 @@ class SignIn extends Component {
             data[formElementId] = this.state.signInForm[formElementId].value;
             return data;
         }, {});
+
+        API.post('/auth/signin', formData)
+            .then(res => {
+                console.log(res.data);
+            }).catch(err => {
+                console.log(err.response.data.message);
+            });
     }
 
     inputChangedHandler = (event, inputId) => {
