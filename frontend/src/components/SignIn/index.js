@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import './SignIn.css';
+
 import Input from '../UI/Input';
 import API from '../../config/api';
 
@@ -12,7 +14,13 @@ class SignIn extends Component {
                     type: 'text',
                     placeholder: 'Sua matrícula'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 9,
+                    maxLength: 9
+                },
+                valid: false
             },
             password: {
                 elementType: 'input',
@@ -20,7 +28,12 @@ class SignIn extends Component {
                     type: 'password',
                     placeholder: 'Sua senha'
                 },
-                value: ''
+                value: '',
+                validation: {
+                    required: true,
+                    minLength: 6
+                },
+                valid: false
             }
         }
     }
@@ -44,8 +57,17 @@ class SignIn extends Component {
         const updatedSignInForm = {...this.state.signInForm};
         const updatedFormElement = {...updatedSignInForm[inputId]};
         updatedFormElement.value = event.target.value;
+        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
         updatedSignInForm[inputId] = updatedFormElement;
         this.setState({signInForm: updatedSignInForm});
+    }
+
+    checkValidity = (value, rules) => {
+        let isRequired = !rules.required || value.trim() !== '';
+        let hasMinLength = !rules.minLength || value.length >= rules.minLength;
+        let hasMaxLength = !rules.maxLength || value.length <= rules.maxLength;
+        
+        return isRequired && hasMinLength && hasMaxLength;
     }
     
     render() { 
@@ -57,7 +79,7 @@ class SignIn extends Component {
         });
 
         return ( 
-            <div>
+            <div className='SignIn'>
                 <form onSubmit={this.submitHandler}>
                     {formElements.map(element => (
                         <Input {...element.config} key={element.id}
