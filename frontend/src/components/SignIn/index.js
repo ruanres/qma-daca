@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { Link } from 'react-router-dom';
 import './SignIn.css';
 
 import Input from '../UI/Input';
@@ -69,6 +69,16 @@ class SignIn extends Component {
         
         return isRequired && hasMinLength && hasMaxLength;
     }
+
+    isFormValid = () => {
+        const formElementsKeys = Object.keys(this.state.signInForm);
+        const isValid = formElementsKeys.reduce((valid, elementKey) => {
+            const inputElement = this.state.signInForm[elementKey];
+            return valid && inputElement.valid;
+        }, true);
+        
+        return isValid;
+    }
     
     render() { 
         const formElements = Object.keys(this.state.signInForm).map(key => {
@@ -80,13 +90,18 @@ class SignIn extends Component {
 
         return ( 
             <div className='SignIn'>
-                <form onSubmit={this.submitHandler}>
+                <form>
                     {formElements.map(element => (
                         <Input {...element.config} key={element.id}
                          changed={(event) => this.inputChangedHandler(event, element.id)}/>)
                     )}
-                    <button type="submit">SingIn</button>
                 </form>
+                <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
+                    Login
+                </button>
+                <Link to='/signup'> 
+                    <button>Register</button>
+                </Link>
             </div>
         );
     }
