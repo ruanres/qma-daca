@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+
 import './SignIn.css';
 
 import Input from '../UI/Input';
@@ -12,7 +13,7 @@ class SignIn extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Sua matrícula'
+                    placeholder: 'Matrícula'
                 },
                 value: '',
                 validation: {
@@ -26,7 +27,7 @@ class SignIn extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Sua senha'
+                    placeholder: 'Senha'
                 },
                 value: '',
                 validation: {
@@ -63,9 +64,9 @@ class SignIn extends Component {
     }
 
     checkValidity = (value, rules) => {
-        let isRequired = !rules.required || value.trim() !== '';
-        let hasMinLength = !rules.minLength || value.length >= rules.minLength;
-        let hasMaxLength = !rules.maxLength || value.length <= rules.maxLength;
+        const isRequired = !rules.required || value.trim() !== '';
+        const hasMinLength = !rules.minLength || value.length >= rules.minLength;
+        const hasMaxLength = !rules.maxLength || value.length <= rules.maxLength;
         
         return isRequired && hasMinLength && hasMaxLength;
     }
@@ -88,19 +89,21 @@ class SignIn extends Component {
             };
         });
 
+        const inputs = formElements.map(element => (
+            <Input {...element.config} key={element.id}
+             changed={(event) => this.inputChangedHandler(event, element.id)}/>)
+        );
+
         return ( 
             <div className='SignIn'>
                 <form>
-                    {formElements.map(element => (
-                        <Input {...element.config} key={element.id}
-                         changed={(event) => this.inputChangedHandler(event, element.id)}/>)
-                    )}
+                    {inputs}
                 </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
                     Login
                 </button>
                 <Link to='/signup'> 
-                    <button>Register</button>
+                    <button>Cadastrar</button>
                 </Link>
             </div>
         );
