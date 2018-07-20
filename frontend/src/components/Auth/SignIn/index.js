@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 
 import './SignIn.css';
 
 import Input from '../../UI/Input';
-import API from '../../../config/api';
+
 
 class SignIn extends Component {
     state = {
@@ -41,17 +43,12 @@ class SignIn extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        const formData = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
+        const authData = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
             data[formElementId] = this.state.signInForm[formElementId].value;
             return data;
         }, {});
 
-        API.post('/auth/signin', formData)
-            .then(res => {
-                console.log(res.data);
-            }).catch(err => {
-                console.log(err.response.data.message);
-            });
+        this.props.onSignIn(authData);
     }
 
     inputChangedHandler = (event, inputId) => {
@@ -109,5 +106,12 @@ class SignIn extends Component {
         );
     }
 }
+
+
+const dispatchToProps = dispatch => {
+    return {
+        onSignIn: (authData) => dispatch(actions.signIn(authData))
+    };
+};
  
-export default SignIn;
+export default connect(null, dispatchToProps)(SignIn);
