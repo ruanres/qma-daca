@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../../store/actions';
 
 import './SignIn.css';
-
 import Input from '../../UI/Input';
 
 
@@ -43,12 +42,12 @@ class SignIn extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        const authData = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
+        const credentials = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
             data[formElementId] = this.state.signInForm[formElementId].value;
             return data;
         }, {});
 
-        this.props.onSignIn(authData);
+        this.props.onSignIn(credentials);
     }
 
     inputChangedHandler = (event, inputId) => {
@@ -91,11 +90,9 @@ class SignIn extends Component {
              changed={(event) => this.inputChangedHandler(event, element.id)}/>)
         );
 
-        return ( 
-            <div className='SignIn'>
-                <form>
-                    {inputs}
-                </form>
+        const form = (
+            <div>
+                <form> {inputs} </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
                     Login
                 </button>
@@ -104,14 +101,27 @@ class SignIn extends Component {
                 </Link>
             </div>
         );
+
+        const spinner = (<div> spinner </div>); 
+
+        return ( 
+            <div className='SignIn'>
+               {this.props.isLoading ? spinner : form}
+            </div>
+        );
     }
 }
 
+const stateToProps = state => {
+    return {
+        isLoading: state.auth.isLoading
+    };
+};
 
 const dispatchToProps = dispatch => {
     return {
-        onSignIn: (authData) => dispatch(actions.signIn(authData))
+        onSignIn: (credentials) => dispatch(actions.signIn(credentials))
     };
 };
  
-export default connect(null, dispatchToProps)(SignIn);
+export default connect(stateToProps, dispatchToProps)(SignIn);

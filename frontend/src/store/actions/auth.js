@@ -1,6 +1,9 @@
 import * as actionTypes from './actionTypes';
 import API from '../../config/api';
 
+const SIGNIN_URL = '/auth/signin';
+const SIGNUP_URL = '/auth/signup';
+
 export const authStart = () => {
     return {
         type: actionTypes.AUTH_START
@@ -21,15 +24,23 @@ export const authFail = (error) => {
     };
 };
 
-export const signIn = (authData) => {
+export const signIn = (credentials) => {
+    return auth(SIGNIN_URL, credentials);
+};
+
+export const signUp = (signUpData) => {
+    return auth(SIGNUP_URL, signUpData);
+};
+
+const auth = (url, data) => {
     return dispatch => {
         dispatch(authStart());
-
-        API.post('/auth/signin', authData)
+    
+        API.post(url, data)
             .then(res => {
-                dispatch(authSuccess());
-            }).catch(err => {
-                dispatch(authFail());
+                dispatch(authSuccess(res.data));
+            }).catch(error => {
+                dispatch(authFail(error));
             });
     };
 };

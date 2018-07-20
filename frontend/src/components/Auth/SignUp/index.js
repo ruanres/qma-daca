@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../../store/actions';
 
 import './SignUp.css';
-
 import Input from '../../UI/Input';
-import API from '../../../config/api';
 
 
 class SignUp extends Component {
@@ -107,13 +107,7 @@ class SignUp extends Component {
             data[formElementId] = this.state.signUpForm[formElementId].value;
             return data;
         }, {});
-
-        API.post('/auth/signup', formData)
-            .then(res => {
-                console.log(res.data);
-            }).catch(err => {
-                console.log(err.response.data.message);
-            });
+        this.props.onSingUp(formData);
     }
 
     inputChangedHandler = (event, inputId) => {
@@ -158,17 +152,35 @@ class SignUp extends Component {
              changed={(event) => this.inputChangedHandler(event, element.id)}/>)
         );
 
-        return ( 
-            <div className="SignUp">
-                <form>
-                    {inputs}
-                </form>
+        const form = (
+            <div>
+                <form> {inputs} </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
                     Enviar
                 </button>
             </div>
+        );
+
+        const spinner = (<div> Spinner </div>);
+
+        return ( 
+            <div className="SignUp">
+                {this.props.isLoading ? spinner : form}
+            </div>
         )
     }
 }
- 
-export default SignUp;
+
+const stateToProps = state => {
+    return {
+        isLoading: state.auth.isLoading
+    };
+};
+
+const dispatchToProps = dispatch => {
+    return {
+        onSingUp: (data) => dispatch(actions.signUp(data))
+    };
+};
+
+export default connect(stateToProps, dispatchToProps)(SignUp);
