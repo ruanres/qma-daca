@@ -3,8 +3,9 @@ import { Switch, Route } from 'react-router-dom';
 
 import './Main.css';
 import Header from './Header';
-import SignIn from '../SignIn';
-import SignUp from '../SignUp';
+import Auth from '../Auth';
+import SignIn from '../Auth/SignIn';
+import SignUp from '../Auth/SignUp';
 
 class Main extends Component {
 
@@ -14,8 +15,9 @@ class Main extends Component {
                 <Header/>
                 <div className="content">
                     <Switch>
-                        <Route path='/signin' exact component={ SignIn }/>
-                        <Route path='/signup' exact component={ SignUp }/>
+                        <Route path='/' exact render={() => <h4>Home</h4>}/>
+                        <Route path='/signin' component={ SignIn }/>
+                        <Route path='/signup' component={ SignUp }/>
                     </Switch>
                 </div>
             </div>

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import './SignUp.css';
 
-import Input from '../UI/Input';
-import API from '../../config/api';
+import Input from '../../UI/Input';
+import API from '../../../config/api';
 
 
 class SignUp extends Component {

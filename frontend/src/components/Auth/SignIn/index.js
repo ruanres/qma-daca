@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 
 import './SignIn.css';
 
-import Input from '../UI/Input';
-import API from '../../config/api';
+import Input from '../../UI/Input';
+import API from '../../../config/api';
 
 class SignIn extends Component {
     state = {
