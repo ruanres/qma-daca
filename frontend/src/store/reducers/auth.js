@@ -3,38 +3,45 @@ import { updateObj } from '../utils';
 
 
 const initialState = {
-    isAuthenticated: false,
     isLoading: false,
-    hasFailed: false,
+    error: null,
     token: null,
-    data: null,
+    message: null,
 };
 
 const authStart = (state, action) => {
     return updateObj(state, {
         isLoading: true,
-        hasFailed: false
+        error: null
     });
 };
 
-const authSuccess = (state, action) => {
+const signinSuccess = (state, action) => {
     return updateObj(state, {
         isLoading: false,
-        data: action.authData
+        token: action.authData.accessToken
+    });
+};
+
+const signupSuccess = (state, action) => {
+    return updateObj(state, {
+        isLoading: false,
+        message: action.authData.message
     });
 };
 
 const authFail = (state, action) => {
     return updateObj(state, {
         isLoading: false,
-        hasFailed: true
+        error: action.error
     });
 };
 
 const reducer = (state= initialState, action) => {
     switch (action.type) {
         case actionType.AUTH_START: return authStart(state, action);
-        case actionType.AUTH_SUCCESS: return authSuccess(state, action);
+        case actionType.SIGNIN_SUCCESS: return signinSuccess(state, action);
+        case actionType.SIGNUP_SUCCESS: return signupSuccess(state, action);
         case actionType.AUTH_FAIL: return authFail(state, action); 
         default: return state;
     }

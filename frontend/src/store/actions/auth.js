@@ -10,9 +10,16 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (authData) => {
+export const signinSuccess = (authData) => {
     return {
-        type: actionTypes.AUTH_SUCCESS,
+        type: actionTypes.SIGNIN_SUCCESS,
+        authData
+    };
+};
+
+export const signupSuccess = (authData) => {
+    return {
+        type: actionTypes.SIGNUP_SUCCESS,
         authData
     };
 };
@@ -25,20 +32,20 @@ export const authFail = (error) => {
 };
 
 export const signIn = (credentials) => {
-    return auth(SIGNIN_URL, credentials);
+    return auth(SIGNIN_URL, credentials, signinSuccess);
 };
 
 export const signUp = (signUpData) => {
-    return auth(SIGNUP_URL, signUpData);
+    return auth(SIGNUP_URL, signUpData, signupSuccess);
 };
 
-const auth = (url, data) => {
+const auth = (url, data, onSuccess) => {
     return dispatch => {
         dispatch(authStart());
     
         API.post(url, data)
             .then(res => {
-                dispatch(authSuccess(res.data));
+                dispatch(onSuccess(res.data));
             }).catch(error => {
                 dispatch(authFail(error));
             });
