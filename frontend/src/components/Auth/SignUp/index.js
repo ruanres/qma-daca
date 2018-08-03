@@ -4,6 +4,7 @@ import * as actions from '../../../store/actions';
 
 import './SignUp.css';
 import Input from '../../UI/Input';
+import Spinner from '../../UI/Spinner';
 
 
 class SignUp extends Component {
@@ -161,13 +162,11 @@ class SignUp extends Component {
             </div>
         );
 
-        const spinner = (<div> Spinner </div>);
-
         return ( 
             <div className="SignUp">
-                {this.props.isLoading ? spinner : form}
+                {this.props.isLoading ? <Spinner/> : form}
             </div>
-        )
+        );
     }
 }
 
