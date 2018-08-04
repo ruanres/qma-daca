@@ -18,13 +18,16 @@ public class JwtTokenProvider {
     @Value("${app.jwtSecret}")
     private String jwtSecret;
 
+    @Value("${app.tokenExpireTime}")
+    private int tokenExpireTimeAmount;
+
     public String generateToke(Authentication authentication) {
         StudentPrincipal studentPrincipal = (StudentPrincipal) authentication.getPrincipal();
-
+        int SECONDS_PER_HOUR = 3600;
         Date now = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(now);
-        calendar.add(Calendar.HOUR, 1);
+        calendar.add(Calendar.HOUR, tokenExpireTimeAmount/SECONDS_PER_HOUR);
         Date expiryDate = calendar.getTime();
 
         return Jwts.builder()
