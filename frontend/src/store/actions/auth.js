@@ -31,21 +31,42 @@ export const authFail = (error) => {
     };
 };
 
+export const logout = () => {
+    return {
+        type: actionTypes.AUTH_LOGOUT
+    };
+};
+
+const checkAuthTimeout = (expirationTime) => {
+    const MILLISECONDS_PER_SECOND = 1000;
+    return dispatch => {
+        setTimeout(() => {
+            dispatch(logout());
+        }, expirationTime * MILLISECONDS_PER_SECOND);
+    };
+};
+
 export const signIn = (credentials) => {
-    return auth(SIGNIN_URL, credentials, signinSuccess);
-};
-
-export const signUp = (signUpData) => {
-    return auth(SIGNUP_URL, signUpData, signupSuccess);
-};
-
-const auth = (url, data, onSuccess) => {
     return dispatch => {
         dispatch(authStart());
     
-        API.post(url, data)
+        API.post(SIGNIN_URL, credentials)
             .then(res => {
-                dispatch(onSuccess(res.data));
+                dispatch(signinSuccess(res.data));
+                checkAuthTimeout(res.data.expiresIn)
+            }).catch(error => {
+                dispatch(authFail(error));
+            });
+    };
+};
+
+export const signUp = (signUpData) => {
+    return dispatch => {
+        dispatch(authStart());
+    
+        API.post(SIGNUP_URL, signUpData)
+            .then(res => {
+                dispatch(signupSuccess(res.data));
             }).catch(error => {
                 dispatch(authFail(error));
             });
