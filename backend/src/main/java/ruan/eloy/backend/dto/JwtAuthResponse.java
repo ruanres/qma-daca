@@ -1,6 +1,6 @@
 package ruan.eloy.backend.dto;
 
-public class JwtAuthenticationResponse {
+public class JwtAuthResponse {
 
     private String accessToken;
 
@@ -8,7 +8,7 @@ public class JwtAuthenticationResponse {
 
     private static int expiresIn = 18000;
 
-    public JwtAuthenticationResponse(String accessToken) {
+    public JwtAuthResponse(String accessToken) {
         this.accessToken = accessToken;
     }
 

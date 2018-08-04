@@ -11,8 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ruan.eloy.backend.entity.Student;
-import ruan.eloy.backend.dto.ApiResponse;
-import ruan.eloy.backend.dto.JwtAuthenticationResponse;
+import ruan.eloy.backend.dto.SignUpResponse;
+import ruan.eloy.backend.dto.JwtAuthResponse;
 import ruan.eloy.backend.dto.SignInRequest;
 import ruan.eloy.backend.dto.SignUpRequest;
 import ruan.eloy.backend.service.StudentService;
@@ -52,20 +52,20 @@ public class AuthService {
 
         String jwt = jwtTokenProvider.generateToke(authentication);
 
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+        return ResponseEntity.ok(new JwtAuthResponse(jwt));
     }
 
     public ResponseEntity<?> registration(@Valid SignUpRequest signUpRequest) {
-        ApiResponse apiResponse;
+        SignUpResponse signUpResponse;
 
         if(studentService.isRegistrationUnique(signUpRequest.getRegistration())) {
-            apiResponse = new ApiResponse(false, "Registration already taken");
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+            signUpResponse = new SignUpResponse(false, "Registration already taken");
+            return new ResponseEntity<>(signUpResponse, HttpStatus.BAD_REQUEST);
         }
 
         if(studentService.isEmailUnique(signUpRequest.getEmail())) {
-            apiResponse = new ApiResponse(false, "Email already taken");
-            return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+            signUpResponse = new SignUpResponse(false, "Email already taken");
+            return new ResponseEntity<>(signUpResponse, HttpStatus.BAD_REQUEST);
         }
 
         String encodedPassword = passwordEncoder.encode(signUpRequest.getPassword());
@@ -81,7 +81,8 @@ public class AuthService {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/student/{registration}")
                 .buildAndExpand(student.getRegistration()).toUri();
-        apiResponse = new ApiResponse(true, "Student registered successfully");
-        return ResponseEntity.created(location).body(apiResponse);
+        signUpResponse = new SignUpResponse(true,
+                "Student registered successfully", signUpRequest.getRegistration());
+        return ResponseEntity.created(location).body(signUpResponse);
     }
 }

@@ -4,8 +4,8 @@ import { updateObj } from '../utils';
 
 const initialState = {
     isLoading: false,
-    error: null,
     token: null,
+    error: null,
     message: null,
 };
 
