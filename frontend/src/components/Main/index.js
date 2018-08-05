@@ -7,6 +7,7 @@ import Header from './Header';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import Logout from '../Auth/Logout';
+import NewTutor from '../Tutor/NewTutor';
 import * as actions from '../../store/actions';
 
 class Main extends Component {
@@ -29,6 +30,7 @@ class Main extends Component {
             <Switch>
                 <Route path='/' exact render={() => <h4>Home</h4>}/>
                 <Route path='/logout' component={ Logout }/>
+                <Route path='/newtutor' component={ NewTutor }/>
                 <Redirect to="/" />
             </Switch>
         );
