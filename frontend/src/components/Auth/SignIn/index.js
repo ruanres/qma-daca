@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
+import * as actions from '../../../store/actions';
 import './SignIn.css';
+import Input from '../../UI/Input';
+import Spinner from '../../UI/Spinner';
 
-import Input from '../UI/Input';
-import API from '../../config/api';
 
 class SignIn extends Component {
     state = {
@@ -15,13 +17,13 @@ class SignIn extends Component {
                     type: 'text',
                     placeholder: 'Matrícula'
                 },
-                value: '',
+                value: this.props.registration,
                 validation: {
                     required: true,
                     minLength: 9,
                     maxLength: 9
                 },
-                valid: false
+                valid: this.props.registration.length > 0
             },
             password: {
                 elementType: 'input',
@@ -41,17 +43,12 @@ class SignIn extends Component {
 
     submitHandler = (event) => {
         event.preventDefault();
-        const formData = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
+        const credentials = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
             data[formElementId] = this.state.signInForm[formElementId].value;
             return data;
         }, {});
 
-        API.post('/auth/signin', formData)
-            .then(res => {
-                console.log(res.data);
-            }).catch(err => {
-                console.log(err.response.data.message);
-            });
+        this.props.onSignIn(credentials);
     }
 
     inputChangedHandler = (event, inputId) => {
@@ -80,8 +77,8 @@ class SignIn extends Component {
         
         return isValid;
     }
-    
-    render() { 
+
+    generateForm = () => {
         const formElements = Object.keys(this.state.signInForm).map(key => {
             return {
                 id: key,
@@ -94,11 +91,9 @@ class SignIn extends Component {
              changed={(event) => this.inputChangedHandler(event, element.id)}/>)
         );
 
-        return ( 
-            <div className='SignIn'>
-                <form>
-                    {inputs}
-                </form>
+        return (
+            <div>
+                <form> {inputs} </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
                     Login
                 </button>
@@ -108,6 +103,29 @@ class SignIn extends Component {
             </div>
         );
     }
+
+    render() { 
+        const form = this.props.isAuthenticated ? (<Redirect to="/" />) : this.generateForm();
+        return ( 
+            <div className='SignIn'>
+               { this.props.isLoading ? <Spinner/> : form }
+            </div>
+        );
+    }
 }
+
+const stateToProps = state => {
+    return {
+        isLoading: state.auth.isLoading,
+        registration: state.auth.registration,
+        isAuthenticated: state.auth.token !== null
+    };
+};
+
+const dispatchToProps = dispatch => {
+    return {
+        onSignIn: (credentials) => dispatch(actions.signIn(credentials))
+    };
+};
  
-export default SignIn;
+export default connect(stateToProps, dispatchToProps)(SignIn);

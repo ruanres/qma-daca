@@ -1,12 +1,14 @@
 package ruan.eloy.backend.dto;
 
-public class JwtAuthenticationResponse {
+public class JwtAuthResponse {
 
     private String accessToken;
 
-    private String tokenType = "Bearer";
+    private static String tokenType = "Bearer";
 
-    public JwtAuthenticationResponse(String accessToken) {
+    private static int expiresIn = 18000;
+
+    public JwtAuthResponse(String accessToken) {
         this.accessToken = accessToken;
     }
 
@@ -24,5 +26,9 @@ public class JwtAuthenticationResponse {
 
     public void setTokenType(String tokenType) {
         this.tokenType = tokenType;
+    }
+
+    public int getExpiresIn() {
+        return expiresIn;
     }
 }

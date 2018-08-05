@@ -1,26 +1,59 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import './Main.css';
 import Header from './Header';
-import SignIn from '../SignIn';
-import SignUp from '../SignUp';
+import SignIn from '../Auth/SignIn';
+import SignUp from '../Auth/SignUp';
+import Logout from '../Auth/Logout';
+import * as actions from '../../store/actions';
 
 class Main extends Component {
 
+    componentDidMount() {
+        this.props.onTryAutoSignin();
+    }
+
     render () {
+        const routes = (
+            <Switch>
+                <Route path='/' exact render={() => <h4>Home</h4>}/>
+                <Route path='/signin' component={ SignIn }/>
+                <Route path='/signup' component={ SignUp }/>
+                <Redirect to="/" />
+            </Switch>
+        );
+
+        const authRoutes = (
+            <Switch>
+                <Route path='/' exact render={() => <h4>Home</h4>}/>
+                <Route path='/logout' component={ Logout }/>
+                <Redirect to="/" />
+            </Switch>
+        );
+
         return (
             <div className="Main">
-                <Header/>
+                <Header isAuth={ this.props.isAuthenticated }/>
                 <div className="content">
-                    <Switch>
-                        <Route path='/signin' exact component={ SignIn }/>
-                        <Route path='/signup' exact component={ SignUp }/>
-                    </Switch>
+                    { this.props.isAuthenticated? authRoutes : routes }
                 </div>
             </div>
         );
     }
 }
 
-export default Main;
+const stateToProps = state => {
+    return {
+        isAuthenticated: state.auth.token !== null
+    };
+};
+
+const dispatchToProps = dispatch => {
+    return {
+      onTryAutoSignin: () => dispatch(actions.checkAuthState())
+    };
+  };
+
+export default withRouter(connect(stateToProps, dispatchToProps)(Main));
