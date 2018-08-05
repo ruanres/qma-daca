@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../../store/actions';
+import { Redirect } from 'react-router-dom';
 
+import * as actions from '../../../store/actions';
 import './SignUp.css';
 import Input from '../../UI/Input';
 import Spinner from '../../UI/Spinner';
@@ -139,21 +140,20 @@ class SignUp extends Component {
         return isValid && passwordsMatch;
     }
 
-
-    render() { 
+    generateForm = () => {
         const formElements = Object.keys(this.state.signUpForm).map(key => {
             return {
                 id: key,
                 config: this.state.signUpForm[key]
             };
         });
-
+    
         const inputs = formElements.map(element => (
             <Input {...element.config} key={element.id}
              changed={(event) => this.inputChangedHandler(event, element.id)}/>)
         );
-
-        const form = (
+    
+        return (
             <div>
                 <form> {inputs} </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
@@ -161,10 +161,13 @@ class SignUp extends Component {
                 </button>
             </div>
         );
+    }
 
+    render() { 
+        const form = this.props.signupSuccess ? (<Redirect to="/signin" />) : this.generateForm();
         return ( 
             <div className="SignUp">
-                {this.props.isLoading ? <Spinner/> : form}
+                {this.props.isLoading ? <Spinner/> : form }
             </div>
         );
     }
@@ -172,7 +175,8 @@ class SignUp extends Component {
 
 const stateToProps = state => {
     return {
-        isLoading: state.auth.isLoading
+        isLoading: state.auth.isLoading,
+        signupSuccess: state.auth.registration.length > 0  
     };
 };
 

@@ -5,6 +5,7 @@ import { updateObj } from '../utils';
 const initialState = {
     isLoading: false,
     token: null,
+    registration: "",
     error: null,
     message: null,
 };
@@ -12,6 +13,7 @@ const initialState = {
 const authStart = (state, action) => {
     return updateObj(state, {
         isLoading: true,
+        registration: "",
         error: null
     });
 };
@@ -26,14 +28,16 @@ const signinSuccess = (state, action) => {
 const signupSuccess = (state, action) => {
     return updateObj(state, {
         isLoading: false,
-        message: action.authData.message
+        message: action.authData.message,
+        registration: action.authData.registration
     });
 };
 
 const authFail = (state, action) => {
     return updateObj(state, {
         isLoading: false,
-        error: action.error
+        error: action.errorData,
+        message: action.errorData.message
     });
 };
 

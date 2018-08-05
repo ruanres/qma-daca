@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as actions from '../../../store/actions';
 
+import * as actions from '../../../store/actions';
 import './SignIn.css';
 import Input from '../../UI/Input';
 import Spinner from '../../UI/Spinner';
@@ -17,13 +17,13 @@ class SignIn extends Component {
                     type: 'text',
                     placeholder: 'Matrícula'
                 },
-                value: '',
+                value: this.props.registration,
                 validation: {
                     required: true,
                     minLength: 9,
                     maxLength: 9
                 },
-                valid: false
+                valid: this.props.registration.length > 0
             },
             password: {
                 elementType: 'input',
@@ -77,8 +77,8 @@ class SignIn extends Component {
         
         return isValid;
     }
-    
-    render() { 
+
+    generateForm = () => {
         const formElements = Object.keys(this.state.signInForm).map(key => {
             return {
                 id: key,
@@ -91,7 +91,7 @@ class SignIn extends Component {
              changed={(event) => this.inputChangedHandler(event, element.id)}/>)
         );
 
-        const form = (
+        return (
             <div>
                 <form> {inputs} </form>
                 <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
@@ -102,10 +102,13 @@ class SignIn extends Component {
                 </Link>
             </div>
         );
+    }
 
+    render() { 
+        const form = this.props.isAuthenticated ? (<Redirect to="/" />) : this.generateForm();
         return ( 
             <div className='SignIn'>
-               {this.props.isLoading ? <Spinner/> : form}
+               { this.props.isLoading ? <Spinner/> : form }
             </div>
         );
     }
@@ -113,7 +116,9 @@ class SignIn extends Component {
 
 const stateToProps = state => {
     return {
-        isLoading: state.auth.isLoading
+        isLoading: state.auth.isLoading,
+        registration: state.auth.registration,
+        isAuthenticated: state.auth.token !== null
     };
 };
 

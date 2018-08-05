@@ -24,10 +24,10 @@ export const signupSuccess = (authData) => {
     };
 };
 
-export const authFail = (error) => {
+export const authFail = (errorData) => {
     return {
         type: actionTypes.AUTH_FAIL,
-        error
+        errorData
     };
 };
 
@@ -55,7 +55,7 @@ export const signIn = (credentials) => {
                 dispatch(signinSuccess(res.data));
                 checkAuthTimeout(res.data.expiresIn)
             }).catch(error => {
-                dispatch(authFail(error));
+                dispatch(authFail(error.response.data));
             });
     };
 };
@@ -68,7 +68,7 @@ export const signUp = (signUpData) => {
             .then(res => {
                 dispatch(signupSuccess(res.data));
             }).catch(error => {
-                dispatch(authFail(error));
+                dispatch(authFail(error.response.data));
             });
     };
 };
