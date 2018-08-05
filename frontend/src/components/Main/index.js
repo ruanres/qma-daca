@@ -7,8 +7,13 @@ import Header from './Header';
 import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import Logout from '../Auth/Logout';
+import * as actions from '../../store/actions';
 
 class Main extends Component {
+
+    componentDidMount() {
+        this.props.onTryAutoSignin();
+    }
 
     render () {
         return (
@@ -33,4 +38,10 @@ const stateToProps = state => {
     };
 };
 
-export default withRouter(connect(stateToProps)(Main));
+const dispatchToProps = dispatch => {
+    return {
+      onTryAutoSignin: () => dispatch(actions.checkAuthState())
+    };
+  };
+
+export default withRouter(connect(stateToProps, dispatchToProps)(Main));

@@ -3,6 +3,7 @@ import API from '../../config/api';
 
 const SIGNIN_URL = '/auth/signin';
 const SIGNUP_URL = '/auth/signup';
+const MILLISECONDS_PER_SECOND = 1000;
 
 export const authStart = () => {
     return {
@@ -32,13 +33,14 @@ export const authFail = (errorData) => {
 };
 
 export const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expirationDate');
     return {
         type: actionTypes.AUTH_LOGOUT
     };
 };
 
 const checkAuthTimeout = (expirationTime) => {
-    const MILLISECONDS_PER_SECOND = 1000;
     return dispatch => {
         setTimeout(() => {
             dispatch(logout());
@@ -52,6 +54,9 @@ export const signIn = (credentials) => {
     
         API.post(SIGNIN_URL, credentials)
             .then(res => {
+                const expirationDate = calcExpirationDate(res.data.expiresIn);
+                localStorage.setItem("token", res.data.accessToken);
+                localStorage.setItem("expirationDate", expirationDate);
                 dispatch(signinSuccess(res.data));
                 checkAuthTimeout(res.data.expiresIn)
             }).catch(error => {
@@ -71,4 +76,26 @@ export const signUp = (signUpData) => {
                 dispatch(authFail(error.response.data));
             });
     };
+};
+
+export const checkAuthState = () => {
+    return dispatch => {
+        const token = localStorage.getItem('token');
+        if(!token) {
+            dispatch(logout());
+        } else {
+            const expirationDate = new Date(localStorage.getItem('expirationDate'));
+            if(expirationDate < new Date()) {
+                // login
+            } else {
+                dispatch(signinSuccess({accessToken: token}));
+                const remainingTime = expirationDate.getTime() - new Date().getTime();
+                checkAuthTimeout(remainingTime);
+            }
+        }
+    };
+};
+
+const calcExpirationDate = (expirationTime) => {
+    return new Date(new Date().getTime() + expirationTime * MILLISECONDS_PER_SECOND);
 };
