@@ -4,15 +4,25 @@ import { NavLink } from 'react-router-dom';
 import './Header.css';
 
 const Header = (props) => {
-    const login = (<NavLink to='/signin'>Login</NavLink>);
-    const logout = (<NavLink to='/logout'>Logout</NavLink>);
+    const links = (
+        <ul>
+            <li><NavLink to='/' exact>Home</NavLink></li>
+            <li><NavLink to='/signin'>Login</NavLink></li>
+        </ul>
+    );
+
+    const authLinks = (
+        <ul>
+            <li><NavLink to='/' exact>Home</NavLink></li>
+            <li><NavLink to='/newtutor' exact>Tutorar</NavLink></li>
+            <li><NavLink to='/logout'>Logout</NavLink></li>
+        </ul>
+    );
+
     return (
         <div className='Header'>
             <nav>
-                <ul>
-                    <li><NavLink to='/' exact>Home</NavLink></li>
-                    <li>{ props.isAuth ? logout : login }</li>
-                </ul>
+                { props.isAuth ? authLinks : links }
             </nav>
         </div>
     );
