@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route, withRouter } from 'react-router-dom';
+import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import './Main.css';
@@ -16,16 +16,28 @@ class Main extends Component {
     }
 
     render () {
+        const routes = (
+            <Switch>
+                <Route path='/' exact render={() => <h4>Home</h4>}/>
+                <Route path='/signin' component={ SignIn }/>
+                <Route path='/signup' component={ SignUp }/>
+                <Redirect to="/" />
+            </Switch>
+        );
+
+        const authRoutes = (
+            <Switch>
+                <Route path='/' exact render={() => <h4>Home</h4>}/>
+                <Route path='/logout' component={ Logout }/>
+                <Redirect to="/" />
+            </Switch>
+        );
+
         return (
             <div className="Main">
                 <Header isAuth={ this.props.isAuthenticated }/>
                 <div className="content">
-                    <Switch>
-                        <Route path='/' exact render={() => <h4>Home</h4>}/>
-                        <Route path='/signin' component={ SignIn }/>
-                        <Route path='/signup' component={ SignUp }/>
-                        <Route path='/logout' component={ Logout }/>
-                    </Switch>
+                    { this.props.isAuthenticated? authRoutes : routes }
                 </div>
             </div>
         );
