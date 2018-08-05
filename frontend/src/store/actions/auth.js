@@ -40,11 +40,11 @@ export const logout = () => {
     };
 };
 
-const checkAuthTimeout = (expirationTime) => {
+const checkAuthTimeout = (secondsUntilExpire) => {
     return dispatch => {
         setTimeout(() => {
             dispatch(logout());
-        }, expirationTime * MILLISECONDS_PER_SECOND);
+        }, secondsUntilExpire * MILLISECONDS_PER_SECOND);
     };
 };
 
@@ -85,12 +85,12 @@ export const checkAuthState = () => {
             dispatch(logout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if(expirationDate < new Date()) {
-                // login
+            if(expirationDate <= new Date()) {
+                dispatch(logout());
             } else {
                 dispatch(signinSuccess({accessToken: token}));
                 const remainingTime = expirationDate.getTime() - new Date().getTime();
-                checkAuthTimeout(remainingTime);
+                checkAuthTimeout(remainingTime/MILLISECONDS_PER_SECOND);
             }
         }
     };
