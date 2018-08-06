@@ -4,18 +4,20 @@ import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../../store/actions';
 import './SignUp.css';
-import Input from '../../UI/Input';
+import Form from '../../UI/Form';
 import Spinner from '../../UI/Spinner';
 
 
 class SignUp extends Component {
-    state = {
-        signUpForm: {
+    state = { }
+
+    getForm = () => {
+        const formFields = {
             name: {
+                label: 'Nome',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Nome'
                 },
                 value: '',
                 validation: {
@@ -25,10 +27,10 @@ class SignUp extends Component {
                 valid: false
             },
             email: {
+                label: 'Email',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Email'
                 },
                 value: '',
                 validation: {
@@ -38,10 +40,10 @@ class SignUp extends Component {
                 valid: false
             },
             registration: {
+                label: 'Matrícula',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Matrícula'
                 },
                 value: '',
                 validation: {
@@ -52,10 +54,10 @@ class SignUp extends Component {
                 valid: false
             },
             courseCode: {
+                label: 'Código do curso',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Código do curso'
                 },
                 value: '',
                 validation: {
@@ -66,20 +68,20 @@ class SignUp extends Component {
                 valid: false
             },
             phone: {
+                label: 'Telefone',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Telefone'
                 },
                 value: '',
                 validation: {},
                 valid: false
             },
             password: {
+                label: 'Senha',
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Senha'
                 },
                 value: '',
                 validation: {
@@ -89,10 +91,10 @@ class SignUp extends Component {
                 valid: false
             },
             confirmPassword: {
+                label: 'Confirme a senha',
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Confirme a senha'
                 },
                 value: '',
                 validation: {
@@ -100,71 +102,18 @@ class SignUp extends Component {
                 },
                 valid: false
             }
-        }
-    }
+        };
 
-    submitHandler = (event) => {
-        event.preventDefault();
-        const formData = Object.keys(this.state.signUpForm).reduce((data, formElementId) => {
-            data[formElementId] = this.state.signUpForm[formElementId].value;
-            return data;
-        }, {});
-        this.props.onSingUp(formData);
-    }
-
-    inputChangedHandler = (event, inputId) => {
-        const updatedSignUpForm = {...this.state.signUpForm};
-        const updatedFormElement = {...updatedSignUpForm[inputId]};
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedSignUpForm[inputId] = updatedFormElement;
-        this.setState({signUpForm: updatedSignUpForm});
-    }
-
-    checkValidity = (value, rules) => {
-        const isRequired = !rules.required || value.trim() !== '';
-        const hasMinLength = !rules.minLength || value.length >= rules.minLength;
-        const hasMaxLength = !rules.maxLength || value.length <= rules.maxLength;
-        const isNotBlank = !rules.notBlank || value.trim().length > 0;
-        
-        return isRequired && hasMinLength && hasMaxLength && isNotBlank;
-    }
-
-    isFormValid = () => {
-        const passwordsMatch = this.state.signUpForm.password.value === this.state.signUpForm.confirmPassword.value
-        const formElementsKeys = Object.keys(this.state.signUpForm);
-        const isValid = formElementsKeys.reduce((valid, elementKey) => {
-            const inputElement = this.state.signUpForm[elementKey];
-            return valid && inputElement.valid;
-        }, true);
-        return isValid && passwordsMatch;
-    }
-
-    generateForm = () => {
-        const formElements = Object.keys(this.state.signUpForm).map(key => {
-            return {
-                id: key,
-                config: this.state.signUpForm[key]
-            };
-        });
-    
-        const inputs = formElements.map(element => (
-            <Input {...element.config} key={element.id}
-             changed={(event) => this.inputChangedHandler(event, element.id)}/>)
-        );
-    
         return (
-            <div>
-                <form> {inputs} </form>
-                <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
-                    Enviar
-                </button>
-            </div>
+            <Form
+                fields={formFields}
+                btnLabel="Cadastrar"
+                onSubmit={this.props.onSingUp}/>
         );
     }
 
     render() { 
-        const form = this.props.signupSuccess ? (<Redirect to="/signin" />) : this.generateForm();
+        const form = this.props.signupSuccess ? (<Redirect to="/signin" />) : this.getForm();
         return ( 
             <div className="SignUp">
                 {this.props.isLoading ? <Spinner/> : form }

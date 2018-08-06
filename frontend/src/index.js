@@ -9,10 +9,12 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
 import AuthReducer from './store/reducers/auth';
+import TutorReducer from './store/reducers/tutor';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
-    auth: AuthReducer
+    auth: AuthReducer,
+    tutor: TutorReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)));

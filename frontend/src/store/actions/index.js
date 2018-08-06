@@ -4,3 +4,7 @@ export {
     logout,
     checkAuthState
 } from './auth';
+
+export {
+    createTutor
+} from './tutor';
