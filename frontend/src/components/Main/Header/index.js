@@ -8,6 +8,7 @@ const Header = (props) => {
         <ul>
             <li><NavLink to='/' exact>Home</NavLink></li>
             <li><NavLink to='/signin'>Login</NavLink></li>
+            <li><NavLink to='/signup'>SignUp</NavLink></li>
         </ul>
     );
 
