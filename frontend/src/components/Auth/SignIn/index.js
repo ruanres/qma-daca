@@ -4,18 +4,21 @@ import { connect } from 'react-redux';
 
 import * as actions from '../../../store/actions';
 import './SignIn.css';
-import Input from '../../UI/Input';
+import Form from '../../UI/Form';
 import Spinner from '../../UI/Spinner';
 
 
 class SignIn extends Component {
-    state = {
-        signInForm: {
+    state = { }
+
+    getForm = () => {
+        const formFields = {
             registration: {
+                label: 'Matrícula',
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeholder: 'Matrícula'
+                    placeholder: ''
                 },
                 value: this.props.registration,
                 validation: {
@@ -26,10 +29,11 @@ class SignIn extends Component {
                 valid: this.props.registration.length > 0
             },
             password: {
+                label: 'Senha',
                 elementType: 'input',
                 elementConfig: {
                     type: 'password',
-                    placeholder: 'Senha'
+                    placeholder: ''
                 },
                 value: '',
                 validation: {
@@ -38,74 +42,23 @@ class SignIn extends Component {
                 },
                 valid: false
             }
-        }
-    }
-
-    submitHandler = (event) => {
-        event.preventDefault();
-        const credentials = Object.keys(this.state.signInForm).reduce((data, formElementId) => {
-            data[formElementId] = this.state.signInForm[formElementId].value;
-            return data;
-        }, {});
-
-        this.props.onSignIn(credentials);
-    }
-
-    inputChangedHandler = (event, inputId) => {
-        const updatedSignInForm = {...this.state.signInForm};
-        const updatedFormElement = {...updatedSignInForm[inputId]};
-        updatedFormElement.value = event.target.value;
-        updatedFormElement.valid = this.checkValidity(updatedFormElement.value, updatedFormElement.validation);
-        updatedSignInForm[inputId] = updatedFormElement;
-        this.setState({signInForm: updatedSignInForm});
-    }
-
-    checkValidity = (value, rules) => {
-        const isRequired = !rules.required || value.trim() !== '';
-        const hasMinLength = !rules.minLength || value.length >= rules.minLength;
-        const hasMaxLength = !rules.maxLength || value.length <= rules.maxLength;
+        };
         
-        return isRequired && hasMinLength && hasMaxLength;
-    }
-
-    isFormValid = () => {
-        const formElementsKeys = Object.keys(this.state.signInForm);
-        const isValid = formElementsKeys.reduce((valid, elementKey) => {
-            const inputElement = this.state.signInForm[elementKey];
-            return valid && inputElement.valid;
-        }, true);
-        
-        return isValid;
-    }
-
-    generateForm = () => {
-        const formElements = Object.keys(this.state.signInForm).map(key => {
-            return {
-                id: key,
-                config: this.state.signInForm[key]
-            };
-        });
-
-        const inputs = formElements.map(element => (
-            <Input {...element.config} key={element.id}
-             changed={(event) => this.inputChangedHandler(event, element.id)}/>)
-        );
-
         return (
             <div>
-                <form> {inputs} </form>
-                <button onClick={this.submitHandler} disabled={!this.isFormValid()}>
-                    Login
-                </button>
-                <Link to='/signup'> 
-                    <button>Cadastrar</button>
+                <Form
+                    fields={formFields}
+                    btnLabel="Login"
+                    onSubmit={this.props.onSignIn}/>            
+                <Link to='/signup'>
+                    <p>Clique aqui para se cadastrar</p> 
                 </Link>
             </div>
         );
     }
-
+    
     render() { 
-        const form = this.props.isAuthenticated ? (<Redirect to="/" />) : this.generateForm();
+        const form = this.props.isAuthenticated ? (<Redirect to="/" />) : this.getForm();
         return ( 
             <div className='SignIn'>
                { this.props.isLoading ? <Spinner/> : form }
