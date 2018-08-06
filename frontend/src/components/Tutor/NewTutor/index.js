@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import './NewTutor.css';
 import Form from '../../UI/Form';
+import * as actions from '../../../store/actions'; 
 
 class NewTutor extends Component {
     
@@ -44,7 +46,7 @@ class NewTutor extends Component {
             <Form 
                 fields={formFields} 
                 btnLabel="Cadastrar"
-                onSubmit={(data) => console.log(data)}/>
+                onSubmit={this.props.onTutorCreation}/>
         );
     }
 
@@ -57,4 +59,10 @@ class NewTutor extends Component {
     }
 }
 
-export default NewTutor;
+const dispatchToProps = dispatch => {
+    return {
+        onTutorCreation: (data) => dispatch(actions.createTutor(data))
+    };
+};
+
+export default connect(null, dispatchToProps)(NewTutor);
