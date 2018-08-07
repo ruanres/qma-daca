@@ -73,6 +73,7 @@ public class TutorService {
     public void removeTutor(Long id, Collection<Tutor> tutors) {
         existsTutor(id, tutors);
         tutorRepository.deleteById(id);
+        // remove tutor from student
     }
 
     public TutorResponse update(Long id, TutorRequest tutorRequest, Collection<Tutor> tutors) {

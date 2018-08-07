@@ -152,4 +152,8 @@ public class Student {
     public void addTutor(Tutor tutor) {
         this.tutors.add(tutor);
     }
+
+    public void removeTutor(Long tutorId) {
+        this.tutors.removeIf(tutor -> tutor.getId().equals(tutorId));
+    }
 }
