@@ -50,9 +50,9 @@ public class TutorController {
         return new ResponseEntity<>(tutorResponse, HttpStatus.OK);
     }
 
-    @DeleteMapping("{tutorId}")
-    public ResponseEntity removeOne(@PathVariable Long tutorId, @CurrentUser StudentPrincipal currentStudent) {
-        tutorService.removeTutor(tutorId, currentStudent.getTutors());
+    @DeleteMapping("{id}")
+    public ResponseEntity removeOne(@PathVariable Long id, @CurrentUser StudentPrincipal currentStudent) {
+        tutorService.removeTutor(id, currentStudent.getTutors());
         return new ResponseEntity(HttpStatus.OK);
     }
 }

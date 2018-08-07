@@ -8,6 +8,7 @@ import SignIn from '../Auth/SignIn';
 import SignUp from '../Auth/SignUp';
 import Logout from '../Auth/Logout';
 import NewTutor from '../Tutor/NewTutor';
+import Home from '../Home';
 import * as actions from '../../store/actions';
 
 class Main extends Component {
@@ -19,7 +20,7 @@ class Main extends Component {
     render () {
         const routes = (
             <Switch>
-                <Route path='/' exact render={() => <h4>Home</h4>}/>
+                <Route path='/' exact component={ Home }/>
                 <Route path='/signin' component={ SignIn }/>
                 <Route path='/signup' component={ SignUp }/>
                 <Redirect to="/" />

@@ -45,15 +45,10 @@ class SignIn extends Component {
         };
         
         return (
-            <div>
-                <Form
-                    fields={formFields}
-                    btnLabel="Login"
-                    onSubmit={this.props.onSignIn}/>            
-                <Link to='/signup'>
-                    <p>Clique aqui para se cadastrar</p> 
-                </Link>
-            </div>
+            <Form
+                fields={formFields}
+                btnLabel="Login"
+                onSubmit={this.props.onSignIn}/>            
         );
     }
     
