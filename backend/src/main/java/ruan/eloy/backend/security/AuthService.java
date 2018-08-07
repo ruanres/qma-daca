@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ruan.eloy.backend.entity.Student;
 import ruan.eloy.backend.dto.SignUpResponse;
-import ruan.eloy.backend.dto.JwtAuthResponse;
+import ruan.eloy.backend.dto.SignInResponse;
 import ruan.eloy.backend.dto.SignInRequest;
 import ruan.eloy.backend.dto.SignUpRequest;
 import ruan.eloy.backend.service.StudentService;
@@ -52,7 +52,7 @@ public class AuthService {
 
         String jwt = jwtTokenProvider.generateToke(authentication);
 
-        return ResponseEntity.ok(new JwtAuthResponse(jwt));
+        return ResponseEntity.ok(new SignInResponse(jwt));
     }
 
     public ResponseEntity<?> registration(@Valid SignUpRequest signUpRequest) {
